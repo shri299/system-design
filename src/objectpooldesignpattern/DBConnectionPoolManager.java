@@ -13,7 +13,7 @@ public class DBConnectionPoolManager {
 
     static DBConnectionPoolManager dbConnectionPoolManager = null;
 
-    public DBConnectionPoolManager (){
+    private DBConnectionPoolManager (){
         for (int i=0;i<INITIAL_POOL_SIZE;i++){
             freeList.add(new DBConnection());
         }
