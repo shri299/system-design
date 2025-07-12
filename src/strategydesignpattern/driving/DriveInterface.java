@@ -1,4 +1,4 @@
-package strategydesignpattern;
+package strategydesignpattern.driving;
 
 public interface DriveInterface {
 

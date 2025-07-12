@@ -1,4 +1,6 @@
-package strategydesignpattern;
+package strategydesignpattern.driving;
+
+import strategydesignpattern.driving.DriveInterface;
 
 public class Vehicle {
 
