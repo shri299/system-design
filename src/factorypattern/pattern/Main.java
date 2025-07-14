@@ -1,4 +1,4 @@
-package factorypattern;
+package factorypattern.pattern;
 
 public class Main {
 

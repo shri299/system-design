@@ -1,4 +1,8 @@
-package factorypattern;
+package factorypattern.pattern;
+
+import factorypattern.pattern.Circle;
+import factorypattern.pattern.Rectangle;
+import factorypattern.pattern.Shape;
 
 public class ShapeObjectFactory {
     Shape getShape(String input){
