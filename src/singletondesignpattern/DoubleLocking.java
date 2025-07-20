@@ -3,6 +3,9 @@ package singletondesignpattern;
 public class DoubleLocking {
 
     private static DoubleLocking doubleLocking;
+    //can make this variable volatile
+    //since new obj creation is a multiple step process
+    //and due to out of order execution by jvm, there is chance thread 2 get doubleLocking not null, even b4 its initialised.
 
     private DoubleLocking (){
 
