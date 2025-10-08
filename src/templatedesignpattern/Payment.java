@@ -9,7 +9,7 @@ public abstract class Payment {
     public abstract void calculateFee();
     public abstract void creditAmount();
 
-    public final void sendMoney(){ //a common template that ech child class must follow
+    public final void sendMoney(){ //a common pattern that ech child class must follow
         validateRequest();
         debitAmount();
         calculateFee();
