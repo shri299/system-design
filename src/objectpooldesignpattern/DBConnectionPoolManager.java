@@ -5,13 +5,13 @@ import java.util.List;
 
 public class DBConnectionPoolManager {
 
-    List<DBConnection> freeList = new ArrayList<>(); //free resource pool
-    List<DBConnection> inUseList = new ArrayList<>();
-    static int MAX_POOL_SIZE = 6;
+    private final List<DBConnection> freeList = new ArrayList<>(); //free resource pool
+    private final List<DBConnection> inUseList = new ArrayList<>();
+    private final int MAX_POOL_SIZE = 6;
 
-    static int INITIAL_POOL_SIZE = 3;
+    private final int INITIAL_POOL_SIZE = 3;
 
-    static DBConnectionPoolManager dbConnectionPoolManager = null;
+    private static DBConnectionPoolManager dbConnectionPoolManager = null;
 
     private DBConnectionPoolManager (){
         for (int i=0;i<INITIAL_POOL_SIZE;i++){
@@ -19,6 +19,7 @@ public class DBConnectionPoolManager {
         }
     }
 
+    //double locking approach
     public static DBConnectionPoolManager getInstance(){
         if (dbConnectionPoolManager==null){
             synchronized (DBConnectionPoolManager.class){

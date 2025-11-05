@@ -1,0 +1,7 @@
+- A creation design pattern
+- Manages pool of reusable object like db connection pool
+- Borrows from the pool, uses it and returns it when done
+- Reduces overhead of creating and destroying frequently used objects
+- Reduces latency but using already created object
+- prevents resource exhaustion by managing the number of object creation
+- Should be used with singleton design pattern and requires thread safety when acquiring and releasing resource
