@@ -89,7 +89,7 @@ public class Notification {
 }
 
 public class MeetingScheduler{
-    private final MeetingScheduler meetingScheduler = new MeetingScheduler();
+    private static final MeetingScheduler meetingScheduler = new MeetingScheduler();
     private final MeetingRoomController meetingRoomController;
     private final MeetingCalendar meetingCalendar;
     private final NotificationService notificationService;
