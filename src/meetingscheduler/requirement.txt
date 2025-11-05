@@ -39,8 +39,15 @@ public class MeetingRoom{
 }
 
 public class MeetingRoomController{
-    private List<MeetingRoom> meetingRooms;
-    //crud function here
+    private final Map<String, MeetingRoom> meetingRooms;
+
+   public MeetingRoomController (){
+        meetingRooms = new ConcurrentHashMap<>();
+   }
+
+    public boolean roomExist(String id){
+        return meetingRooms.containsKey(id);
+    }
 }
 
 public class MeetingCalendar{
@@ -82,26 +89,39 @@ public class Notification {
 }
 
 public class MeetingScheduler{
-    private MeetingRoomController meetingRoomController;
-    private MeetingCalendar meetingCalendar;
-    private NotificationService notificationService;
+    private final MeetingScheduler meetingScheduler = new MeetingScheduler();
+    private final MeetingRoomController meetingRoomController;
+    private final MeetingCalendar meetingCalendar;
+    private final NotificationService notificationService;
 
-    public MeetingScheduler (){
+    private MeetingScheduler (){
         meetingRoomController = new MeetingRoomController();
+        meetingCalendar = new MeetingCalendar();
+        notificationService = new NotificationService();
+    }
+
+    //Multiple threads can call getInstance() simultaneously, but they will all receive the same pre-initialized meetingScheduler instance.
+    public static MeetingScheduler getInstance(){
+        return meetingScheduler;
+    }
+
+    //since one object will be share among all threads, synchronized will do just fine on its own
+    public synchronized void addMeetingRoom(int capacity, String id){
+        if(meetingRoomController.roomExist(id)) throw("Room already exists")
+        meetingRoomController.add(capacity,id);
     }
 
 
-    public List<MeetingRoom> getMeetingRoom(String startTime, String endTime, List<Users>){
+    public synchronized List<MeetingRoom> getMeetingRoom(String startTime, String endTime, List<Users>){
         List<MeetingRoom> rooms = meetingRoomController.getAllMeetingRooms();
         List<MeetingRoom> available = new ArrayList<>();
         for(MeetingRoom r : rooms){
             //apply conditions as per the input
         }
-
         return available;
     }
 
-    public void bookMeetingRoom(Meeting meeting) {
+    public synchronized void bookMeetingRoom(Meeting meeting) {
         validateMeeting(meeting);
         createMeeting(meeting);
         updateCalendar(meeting);
@@ -133,8 +153,6 @@ public class MeetingScheduler{
 }
 
 
-It is not ideal to allow such a scenario to occur, as it can lead to inconsistencies and a poor user experience. The interviewer would likely expect you to handle this situation gracefully. Here's how you can address it:
-Key Considerations:
 Concurrency Handling: Ensure that the availability of the meeting room is revalidated at the time of booking to handle cases where multiple users might try to book the same room simultaneously.
 Atomicity: The booking process should be atomic, meaning that the room's availability is checked and updated in a single transaction to avoid race conditions.
 User Feedback: If the room becomes unavailable during booking, provide clear feedback to the user and allow them to select another room.
