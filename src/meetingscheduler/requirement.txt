@@ -1,0 +1,145 @@
+Requirements:
+- there are n given meeting rooms
+- Book a meeting in any meeting room at given interval (start time and end time, capacity)
+- Send notification to all the persons who are invited to the meeting
+- Use Meeting Room Calendar to track the meetings date and time (current day)
+
+
+Approach:
+- First write the down the complete flow in detail
+- Identify the entities(functional classes as well)
+- Then start coding
+- make sure to always follow naming convention
+
+
+Flow:
+- User can fetch the meeting rooms based on capacity and interval
+- User can process to choose a room and book it
+- Send notification to all users when booking success
+- Also update the calendar of a meeting room when success
+
+
+Entities:
+- Meeting
+- MeetingRoom
+- MeetingScheduler
+- MeetingRoomController(Manager calendar and crud of meeting rooms)
+- MeetingCalendar
+- Interval
+- Notification
+- User
+- NotificationService
+
+
+public class MeetingRoom{
+    private int id;
+    private int capacity;
+    private boolean isAvailable;
+    //can also have location object if required
+}
+
+public class MeetingRoomController{
+    private List<MeetingRoom> meetingRooms;
+    //crud function here
+}
+
+public class MeetingCalendar{
+    private final Map<MeetingRoom, List<Interval>> calender;
+}
+
+public class Interval{
+    private String start;
+    private String end;
+    private String day;
+}
+
+public class Meeting{
+    private String meetingId;
+    private User organizer;
+    private Interval scheduler;
+    private List<Users> user;
+}
+
+public class User{
+    private String userId;
+    private String name;
+}
+
+public class NotificationService {
+
+    public void sendNotifications(List<Notification> notifications) {
+        for (Notification notification : notifications) {
+            System.out.println("Sending notification to: " + notification.getRecipient());
+            System.out.println("Message: " + notification.getMessage());
+        }
+    }
+}
+
+
+public class Notification {
+    private String recipient;
+    private String message;
+}
+
+public class MeetingScheduler{
+    private MeetingRoomController meetingRoomController;
+    private MeetingCalendar meetingCalendar;
+    private NotificationService notificationService;
+
+    public MeetingScheduler (){
+        meetingRoomController = new MeetingRoomController();
+    }
+
+
+    public List<MeetingRoom> getMeetingRoom(String startTime, String endTime, List<Users>){
+        List<MeetingRoom> rooms = meetingRoomController.getAllMeetingRooms();
+        List<MeetingRoom> available = new ArrayList<>();
+        for(MeetingRoom r : rooms){
+            //apply conditions as per the input
+        }
+
+        return available;
+    }
+
+    public void bookMeetingRoom(Meeting meeting) {
+        validateMeeting(meeting);
+        createMeeting(meeting);
+        updateCalendar(meeting);
+        sendNotifications(meeting);
+    }
+
+    private void validateMeeting(Meeting meeting) {
+        // Validate input and check room availability
+    }
+
+    private void createMeeting(Meeting meeting) {
+        // Initialize and save the meeting object
+    }
+
+    private void updateCalendar(Meeting meeting) {
+        // Update the meeting room calendar
+    }
+
+    private void sendNotifications(Meeting meeting) {
+            List<Notification> notifications = new ArrayList<>();
+            for (User user : meeting.getUser()) {
+                String message = "Dear " + user.getName() + ", you are invited to a meeting scheduled from "
+                        + meeting.getScheduler().getStart() + " to " + meeting.getScheduler().getEnd() + ".";
+                notifications.add(new Notification(user.getUserId(), message));
+            }
+            notificationService.sendNotifications(notifications);
+        }
+
+}
+
+
+It is not ideal to allow such a scenario to occur, as it can lead to inconsistencies and a poor user experience. The interviewer would likely expect you to handle this situation gracefully. Here's how you can address it:
+Key Considerations:
+Concurrency Handling: Ensure that the availability of the meeting room is revalidated at the time of booking to handle cases where multiple users might try to book the same room simultaneously.
+Atomicity: The booking process should be atomic, meaning that the room's availability is checked and updated in a single transaction to avoid race conditions.
+User Feedback: If the room becomes unavailable during booking, provide clear feedback to the user and allow them to select another room.
+Suggested Approach:
+When fetching available meeting rooms, mark the room as "tentatively reserved" for a short period (e.g., a few minutes) to reduce the likelihood of conflicts.
+At the time of booking, perform a final validation to ensure the room is still available.
+If the room is no longer available, notify the user and allow them to retry with another room.
+
