@@ -1,0 +1,14 @@
+Design a tic-tac-toe game
+
+Flow:
+- Register two players
+- every player will have a turn
+- After every turn check for win or draw
+
+
+Entity
+- Player
+- Matrix(3x3)
+- PieceType(Enum)
+- Piece(Parent class) {Extended by PieceX, PieceO}
+
